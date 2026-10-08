@@ -480,7 +480,7 @@ function start(data) {
 
   /* ----- transcript ----- */
   function transcript(md) {
-    const inline = t => esc(t).replace(/\[\?\]/g, '<span class="unc" title="Uncertain reading">[?]</span>');
+    const inline = t => esc(t).replace(/\*([^*]+)\*/g, '<em>$1</em>').replace(/\[\?\]/g, '<span class="unc" title="Uncertain reading">[?]</span>');
     let html = '', para = [], first = true;
     const flush = () => {
       if (!para.length) return;
@@ -544,7 +544,7 @@ function start(data) {
     if (l.transcript) {
       const tabs = [['summary', 'Summary'], ['transcription', 'Full text'], ['scan', 'Original scan']];
       body = `<div class="tabs" role="tablist">${tabs.map(([k, v]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${st.tab === k}">${v}</button>`).join('')}</div>`;
-      if (st.tab === 'transcription') body += `<p class="transcript-note">Transcribed from the handwritten original. <span class="unc" style="color:var(--postmark)">[?]</span> marks a word that couldn’t be read with confidence.</p><div class="transcript">${transcript(l.transcript)}</div>`;
+      if (st.tab === 'transcription') body += `<p class="transcript-note">${l.draft ? 'Draft transcription, read from the scan. Names and spellings may be off, so check anything important against the original.' : 'Transcribed from the handwritten original.'} <span class="unc" style="color:var(--postmark)">[?]</span> marks a word that couldn’t be read with confidence.</p><div class="transcript">${transcript(l.transcript)}</div>`;
       else if (st.tab === 'scan') body += scanBlock(l);
       else body += summaryBlock(l);
     } else {
