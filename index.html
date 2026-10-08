@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Letters to Jane</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='42' y='8' width='16' height='84' rx='2' fill='%23A33A2C'/%3E%3Crect x='8' y='34' width='84' height='16' rx='2' fill='%23A33A2C'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --desk: #D6CBB5;
+  --desk-deep: #C9BCA2;
+  --paper: #FBF8F0;
+  --paper-2: #F3EDE0;
+  --ink: #1C2B45;
+  --ink-soft: #4E5A72;
+  --pencil: #857B6B;
+  --postmark: #A33A2C;
+  --airmail: #2D5C8F;
+  --rule: rgba(28, 43, 69, 0.14);
+  --rule-strong: rgba(28, 43, 69, 0.28);
+  --display: 'IM Fell English', 'Iowan Old Style', Georgia, serif;
+  --text: 'Spectral', Georgia, serif;
+  --rail: 380px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--desk); color: var(--ink);
+  font-family: var(--text); font-size: 16px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: none; }
+a { color: var(--airmail); }
+:focus-visible { outline: 2px solid var(--airmail); outline-offset: 2px; border-radius: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+[hidden] { display: none !important; }
+
+/* ---------- Rose cross mark ---------- */
+.mark { width: 30px; height: 30px; flex-shrink: 0; }
+
+/* ---------- Password gate ---------- */
+#gate {
+  min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 24px 16px;
+}
+.envelope {
+  width: 100%; max-width: 440px; background: var(--paper); padding: 40px 36px 32px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 18px 40px -18px rgba(28,43,69,.45);
+  position: relative;
+}
+.envelope::before { /* airmail border */
+  content: ''; position: absolute; inset: 0; height: 8px;
+  background: repeating-linear-gradient(-45deg, var(--postmark) 0 14px, var(--paper) 14px 22px, var(--airmail) 22px 36px, var(--paper) 36px 44px);
+}
+.envelope .mark { width: 40px; height: 40px; margin-bottom: 18px; }
+.envelope h1 { font-family: var(--display); font-weight: 400; font-size: 40px; line-height: 1.05; margin-bottom: 10px; }
+.envelope p { color: var(--ink-soft); margin-bottom: 24px; }
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field label { font-size: 14px; color: var(--ink-soft); }
+.field input {
+  padding: 10px 12px; border: 1px solid var(--rule-strong); background: #fff; border-radius: 3px; font-size: 17px;
+}
+.field input:focus { outline: none; border-color: var(--airmail); box-shadow: 0 0 0 3px rgba(45,92,143,.15); }
+.remember { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; }
+.btn-primary {
+  width: 100%; padding: 11px 16px; background: var(--ink); color: var(--paper); border-radius: 3px; font-weight: 500; font-size: 16px;
+}
+.btn-primary:hover { background: #26395B; }
+.btn-primary:disabled { opacity: .6; cursor: progress; }
+.gate-error { color: var(--postmark); font-size: 14px; margin-top: 12px; min-height: 1.4em; }
+
+/* ---------- App shell ---------- */
+#app { height: 100vh; height: 100dvh; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); }
+
+/* Rail: the index of letters */
+#rail { background: var(--paper-2); border-right: 1px solid var(--rule); display: flex; flex-direction: column; min-height: 0; }
+.rail-head { padding: 18px 18px 12px; border-bottom: 1px solid var(--rule); }
+.brand { display: flex; gap: 12px; align-items: center; margin-bottom: 14px; background: none; text-align: left; }
+.brand-title { font-family: var(--display); font-size: 26px; line-height: 1; }
+.brand-sub { font-size: 13px; color: var(--pencil); margin-top: 3px; }
+.search { position: relative; margin-bottom: 10px; }
+.search input {
+  width: 100%; padding: 8px 32px 8px 34px; border: 1px solid var(--rule-strong); border-radius: 3px; background: var(--paper); font-size: 15px;
+}
+.search input::placeholder { color: var(--pencil); }
+.search input:focus { outline: none; border-color: var(--airmail); background: #fff; }
+.search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--pencil); }
+.search .clear { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); padding: 4px 8px; color: var(--pencil); font-size: 18px; line-height: 1; }
+.years { display: flex; border: 1px solid var(--rule-strong); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+.years button { flex: 1; padding: 5px 0; font-size: 14px; color: var(--ink-soft); border-left: 1px solid var(--rule); }
+.years button:first-child { border-left: none; }
+.years button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.toggles { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.toggle { font-size: 13px; padding: 3px 10px; border: 1px solid var(--rule-strong); border-radius: 99px; color: var(--ink-soft); display: inline-flex; gap: 6px; align-items: center; }
+.toggle[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.toggle .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--postmark); }
+.toggle[aria-pressed="true"] .dot { background: var(--paper); }
+.count { margin-left: auto; font-size: 13px; color: var(--pencil); font-style: italic; }
+
+#list { flex: 1; overflow-y: auto; min-height: 0; padding-bottom: 24px; }
+.yr { position: sticky; top: 0; z-index: 1; background: var(--paper-2); padding: 14px 18px 4px; font-family: var(--display); font-size: 22px; border-bottom: 1px solid var(--rule); }
+.move { padding: 10px 18px 4px 40px; font-size: 13px; color: var(--airmail); font-style: italic; position: relative; }
+.move::before { content: ''; position: absolute; left: 22px; top: 50%; width: 10px; height: 1px; background: var(--airmail); }
+.row {
+  display: grid; grid-template-columns: 54px 1fr; column-gap: 8px; width: 100%; text-align: left;
+  padding: 8px 18px 8px 16px; border-left: 3px solid transparent; border-bottom: 1px solid var(--rule);
+}
+.row:hover { background: rgba(255,255,255,.45); }
+.row[aria-current="true"] { background: var(--paper); border-left-color: var(--postmark); }
+.row-num { font-family: var(--display); font-size: 20px; line-height: 1.2; }
+.row-num.word { font-size: 15px; padding-top: 3px; }
+.row-top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--pencil); }
+.row-marks { display: flex; gap: 6px; align-items: center; color: var(--ink-soft); }
+.row-ms { color: var(--postmark); }
+.row-line { font-size: 14px; color: var(--ink-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row-line.empty { color: var(--pencil); font-style: italic; }
+.empty-list { padding: 32px 18px; color: var(--pencil); font-style: italic; }
+mark { background: rgba(45,92,143,.16); color: inherit; border-radius: 2px; }
+
+/* Desk: where a letter is read */
+#desk { overflow-y: auto; min-height: 0; padding: 40px 40px 80px; scroll-behavior: smooth; }
+.back { display: none; }
+.sheet {
+  max-width: 760px; margin: 0 auto; background: var(--paper); position: relative;
+  padding: 52px 64px 48px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.7) inset, 0 22px 48px -24px rgba(28,43,69,.45), 0 2px 4px rgba(28,43,69,.08);
+  background-image: linear-gradient(transparent 0, transparent 100%);
+}
+.postmark { position: absolute; top: 28px; right: 34px; width: 128px; height: 128px; color: var(--postmark); transform: rotate(-9deg); opacity: .82; pointer-events: none; }
+.postmark text { fill: currentColor; font-family: var(--text); font-weight: 600; }
+.letter-no { font-family: var(--display); font-size: 56px; line-height: 1; font-weight: 400; margin-bottom: 8px; padding-right: 140px; }
+.letter-meta { color: var(--ink-soft); font-size: 17px; padding-right: 140px; }
+.tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-right: 120px; }
+.tag { font-size: 13px; padding: 2px 9px; border-radius: 99px; border: 1px solid var(--rule-strong); color: var(--ink-soft); }
+.tag.ms { border-color: var(--postmark); color: var(--postmark); }
+.tag.wire { border-color: var(--airmail); color: var(--airmail); }
+.tag.tr { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.tabs { display: flex; gap: 24px; border-bottom: 1px solid var(--rule); margin: 32px 0 24px; }
+.tabs button { padding: 0 0 8px; font-size: 16px; color: var(--pencil); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.body-gap { height: 32px; }
+
+.summary { font-size: 19px; line-height: 1.7; max-width: 62ch; }
+.excerpt {
+  font-family: var(--display); font-style: italic; font-size: 24px; line-height: 1.4; color: var(--ink);
+  margin: 28px 0 0; padding-left: 22px; border-left: 2px solid var(--postmark); max-width: 30em;
+}
+.unsummarized { font-size: 17px; color: var(--ink-soft); font-style: italic; }
+.context { margin-top: 16px; font-size: 15px; color: var(--pencil); max-width: 62ch; }
+.context strong { font-weight: 500; color: var(--ink-soft); }
+.events { margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--rule); }
+.events h3, .scan h3 { font-family: var(--display); font-weight: 400; font-size: 21px; margin-bottom: 8px; }
+.events ul { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.events li { font-size: 15px; color: var(--ink-soft); display: grid; grid-template-columns: 92px 1fr; gap: 8px; }
+.events time { color: var(--pencil); font-variant-numeric: tabular-nums; }
+
+.scan { margin-top: 36px; }
+.scan-frame { background: var(--desk-deep); padding: 10px; border-radius: 2px; }
+.scan iframe { width: 100%; height: 80vh; min-height: 520px; border: 0; display: block; background: #e9e3d6; }
+.scan-note { font-size: 14px; color: var(--pencil); margin-top: 8px; }
+
+.transcript { font-size: 18px; line-height: 1.8; max-width: 64ch; }
+.transcript p { margin-bottom: 1em; }
+.transcript .salutation { font-family: var(--display); font-size: 22px; }
+.transcript .page { text-align: center; color: var(--pencil); font-size: 14px; font-style: italic; margin: 28px 0; }
+.transcript .unc { color: var(--postmark); font-size: .8em; vertical-align: 1px; }
+.transcript-note { font-size: 14px; color: var(--pencil); margin-bottom: 20px; }
+
+.letter-foot { display: flex; gap: 10px; align-items: stretch; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--rule); flex-wrap: wrap; }
+.nav-btn { flex: 1 1 180px; text-align: left; padding: 10px 14px; border: 1px solid var(--rule-strong); border-radius: 3px; }
+.nav-btn.next { text-align: right; }
+.nav-btn:hover:not(:disabled) { border-color: var(--ink); background: var(--paper-2); }
+.nav-btn:disabled { opacity: .35; cursor: default; }
+.nav-btn small { display: block; font-size: 13px; color: var(--pencil); }
+.nav-btn span { font-family: var(--display); font-size: 19px; }
+.utility { display: flex; gap: 18px; justify-content: flex-end; margin-top: 14px; font-size: 14px; }
+.utility button { color: var(--airmail); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Welcome sheet */
+.welcome h1 { font-family: var(--display); font-weight: 400; font-size: 64px; line-height: 1; margin-bottom: 18px; }
+.welcome .lede { font-size: 20px; line-height: 1.65; max-width: 34em; }
+.journey { margin: 36px 0 8px; }
+.journey-bar { display: flex; height: 44px; gap: 3px; }
+.journey-bar button { min-width: 6px; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: 2px; position: relative; overflow: hidden; }
+.journey-bar button:hover { background: #fff; border-color: var(--ink); }
+.journey-bar button::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--seg); }
+.journey-key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 10px; font-size: 14px; color: var(--ink-soft); }
+.journey-key span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 2px; background: var(--seg); margin-right: 6px; vertical-align: -1px; }
+.welcome-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.btn-ghost { padding: 10px 16px; border: 1px solid var(--rule-strong); border-radius: 3px; }
+.btn-ghost:hover { border-color: var(--ink); }
+.btn-ink { padding: 10px 16px; border-radius: 3px; background: var(--ink); color: var(--paper); }
+.otd { margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--rule); }
+.otd h2 { font-family: var(--display); font-weight: 400; font-size: 26px; margin-bottom: 4px; }
+.otd > p { color: var(--pencil); font-size: 15px; margin-bottom: 14px; }
+.otd-item { display: grid; grid-template-columns: 64px 1fr; gap: 12px; width: 100%; text-align: left; padding: 12px 0; border-top: 1px solid var(--rule); }
+.otd-item:hover .otd-text { color: var(--ink); }
+.otd-year { font-family: var(--display); font-size: 22px; }
+.otd-text { color: var(--ink-soft); font-size: 15px; }
+.otd-text b { font-weight: 500; color: var(--ink); }
+.loading { text-align: center; color: var(--pencil); padding: 80px 0; font-style: italic; }
+
+@media (max-width: 900px) {
+  :root { --rail: 320px; }
+  #desk { padding: 24px 20px 64px; }
+  .sheet { padding: 40px 36px; }
+}
+@media (max-width: 720px) {
+  #app { grid-template-columns: minmax(0, 1fr); }
+  #app[data-view="list"] #desk, #app[data-view="letter"] #rail { display: none; }
+  #rail { border-right: none; }
+  #desk { padding: 0 0 56px; background: var(--paper); }
+  .back {
+    display: flex; align-items: center; gap: 6px; position: sticky; top: 0; z-index: 2; width: 100%;
+    padding: 12px 16px; background: var(--paper-2); border-bottom: 1px solid var(--rule); font-size: 15px; color: var(--airmail);
+  }
+  .sheet { box-shadow: none; padding: 28px 16px 24px; }
+  .postmark { width: 92px; height: 92px; top: 18px; right: 10px; }
+  .letter-no { font-size: 42px; padding-right: 92px; }
+  .letter-meta, .tags { padding-right: 84px; }
+  .summary { font-size: 17px; }
+  .excerpt { font-size: 20px; }
+  .welcome h1 { font-size: 46px; }
+  .welcome .lede { font-size: 17px; }
+  .scan iframe { height: 70vh; min-height: 420px; }
+  .transcript { font-size: 17px; }
+  .events li { grid-template-columns: 1fr; gap: 0; margin-bottom: 6px; }
+  .envelope { padding: 36px 22px 26px; }
+}
+@media (prefers-reduced-motion: reduce) { #desk { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="rose-cross" viewBox="0 0 100 100">
+    <rect x="42" y="8" width="16" height="84" rx="2" fill="#A33A2C"/>
+    <rect x="8" y="34" width="84" height="16" rx="2" fill="#A33A2C"/>
+    <circle cx="50" cy="42" r="12" fill="none" stroke="#C49A3C" stroke-width="1.5"/>
+    <ellipse cx="50" cy="36" rx="4" ry="5" fill="#7E2A20"/><ellipse cx="44" cy="42" rx="5" ry="4" fill="#7E2A20"/>
+    <ellipse cx="56" cy="42" rx="5" ry="4" fill="#7E2A20"/><ellipse cx="47" cy="47" rx="4.5" ry="4" fill="#7E2A20"/>
+    <ellipse cx="53" cy="47" rx="4.5" ry="4" fill="#7E2A20"/><circle cx="50" cy="42" r="3.5" fill="#C49A3C"/>
+  </symbol>
+</svg>
+
+<main id="gate">
+  <form class="envelope" id="gate-form" autocomplete="on">
+    <svg class="mark" aria-hidden="true"><use href="#rose-cross"/></svg>
+    <h1>Letters to Jane</h1>
+    <p>The letters Milan Swasko wrote to Jane Fijal, 1941 to 1945. This family archive is password protected — ask Mick if you need the password.</p>
+    <div class="field">
+      <label for="pw">Password</label>
+      <input id="pw" type="password" autocomplete="current-password" required>
+    </div>
+    <label class="remember"><input type="checkbox" id="remember" checked> Remember me on this device</label>
+    <button class="btn-primary" id="gate-btn" type="submit">Open the letters</button>
+    <div class="gate-error" id="gate-error" role="alert"></div>
+  </form>
+</main>
+
+<div id="app" data-view="list" hidden>
+  <aside id="rail" aria-label="All letters">
+    <div class="rail-head">
+      <button class="brand" id="home-btn" type="button" title="Back to the introduction">
+        <svg class="mark" aria-hidden="true"><use href="#rose-cross"/></svg>
+        <span><span class="brand-title">Letters to Jane</span><span class="brand-sub" style="display:block">Milan E. Swasko, 1941–1945</span></span>
+      </button>
+      <div class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label class="sr-only" for="q">Search the letters</label>
+        <input id="q" type="search" placeholder="Search names, places, or a letter number" autocomplete="off">
+        <button class="clear" id="q-clear" type="button" aria-label="Clear search" hidden>×</button>
+      </div>
+      <div class="years" role="group" aria-label="Year">
+        <button type="button" data-year="all" aria-pressed="true">All</button>
+        <button type="button" data-year="1941" aria-pressed="false">’41</button>
+        <button type="button" data-year="1942" aria-pressed="false">’42</button>
+        <button type="button" data-year="1943" aria-pressed="false">’43</button>
+        <button type="button" data-year="1944" aria-pressed="false">’44</button>
+        <button type="button" data-year="1945" aria-pressed="false">’45</button>
+      </div>
+      <div class="toggles">
+        <button type="button" class="toggle" id="t-ms" aria-pressed="false"><span class="dot"></span>Milestones</button>
+        <button type="button" class="toggle" id="t-tr" aria-pressed="false">Transcribed</button>
+        <span class="count" id="count" aria-live="polite"></span>
+      </div>
+    </div>
+    <nav id="list" aria-label="Letters by date"></nav>
+  </aside>
+  <section id="desk" aria-live="polite">
+    <button class="back" id="back" type="button">‹ All letters</button>
+    <div id="sheet-wrap"><div class="loading">Opening the letters…</div></div>
+  </section>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------------- Storage (best effort) ---------------- */
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+const PW_KEY = 'letters-to-jane:pw';
+
+/* ---------------- Decryption ---------------- */
+const b64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+let payloadPromise = null;
+function loadPayload() {
+  if (!payloadPromise) payloadPromise = fetch('data/archive.enc.json', { cache: 'no-cache' }).then(r => {
+    if (!r.ok) throw new Error('fetch');
+    return r.json();
+  });
+  return payloadPromise;
+}
+async function decrypt(password) {
+  const p = await loadPayload();
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: b64(p.salt), iterations: p.iter, hash: 'SHA-256' },
+    base, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64(p.iv) }, key, b64(p.data));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+/* ---------------- Gate ---------------- */
+const gate = document.getElementById('gate');
+const form = document.getElementById('gate-form');
+const pwEl = document.getElementById('pw');
+const errEl = document.getElementById('gate-error');
+const gateBtn = document.getElementById('gate-btn');
+
+async function unlock(password, remember) {
+  gateBtn.disabled = true; gateBtn.textContent = 'Opening…'; errEl.textContent = '';
+  try {
+    const data = await decrypt(password);
+    if (remember) store.set(PW_KEY, password); else store.del(PW_KEY);
+    gate.hidden = true;
+    start(data);
+    return true;
+  } catch (e) {
+    errEl.textContent = e && e.message === 'fetch'
+      ? 'The letters couldn’t be loaded. Check your connection and reload the page.'
+      : 'That password didn’t work. Check the spelling and capitals, then try again.';
+    gateBtn.disabled = false; gateBtn.textContent = 'Open the letters';
+    return false;
+  }
+}
+form.addEventListener('submit', e => { e.preventDefault(); unlock(pwEl.value, document.getElementById('remember').checked); });
+const saved = store.get(PW_KEY);
+if (saved) unlock(saved, true).then(ok => { if (!ok) { store.del(PW_KEY); errEl.textContent = ''; pwEl.focus(); } });
+else pwEl.focus();
+
+/* ---------------- App ---------------- */
+function start(data) {
+  const LETTERS = data.letters;
+  const EVENTS = data.events;
+  const app = document.getElementById('app');
+  const listEl = document.getElementById('list');
+  const deskEl = document.getElementById('desk');
+  const wrap = document.getElementById('sheet-wrap');
+  const qEl = document.getElementById('q');
+  app.hidden = false;
+
+  const PLACES = {
+    Milwaukee: { full: 'Milwaukee, Wis.', mark: 'MILWAUKEE, WIS.', seg: '#8A6F3E' },
+    Carthage: { full: 'Carthage College, Carthage, Ill.', mark: 'CARTHAGE, ILL.', seg: '#2D5C8F' },
+    Charleroi: { full: 'Charleroi, Pa.', mark: 'CHARLEROI, PA.', seg: '#6B7F3A' },
+    Valparaiso: { full: 'Valparaiso, Ind.', mark: 'VALPARAISO, IND.', seg: '#B07A2A' },
+    Minneapolis: { full: 'Seminary, Minneapolis, Minn.', mark: 'MINNEAPOLIS, MINN.', seg: '#A33A2C' },
+  };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const fmt = s => esc(s).replace(/\*([^*]+)\*/g, '<em>$1</em>');
+
+  LETTERS.forEach((l, i) => {
+    l.i = i;
+    l.year = +l.d.slice(0, 4);
+    l.label = l.kind === 'telegram' ? 'Telegram' : l.kind === 'olga' ? 'From Olga' : l.kind === 'unnumbered' ? 'Unnumbered' : '#' + l.s;
+    l.title = l.kind === 'telegram' ? 'Western Union telegram' : l.kind === 'olga' ? 'A letter from Olga' : l.kind === 'unnumbered' ? 'Unnumbered letter' : 'Letter ' + l.s;
+    l.hay = [l.label, l.dd, l.loc, l.ms, l.notes, l.excerpt, l.transcript, l.kind === 'telegram' ? 'western union telegram' : '', l.kind === 'olga' ? 'olga' : ''].join(' \u0001 ').toLowerCase();
+  });
+  const byS = s => LETTERS.find(l => l.s === s);
+
+  /* ----- state ----- */
+  const st = { year: 'all', ms: false, tr: false, q: '', sel: null, tab: 'summary' };
+
+  function filtered() {
+    const q = st.q.replace(/^#/, '');
+    const isNum = /^\d{1,3}[a-z]?$/.test(q);
+    return LETTERS.filter(l => {
+      if (st.year !== 'all' && l.year !== st.year) return false;
+      if (st.ms && !l.ms) return false;
+      if (st.tr && !l.transcript) return false;
+      if (q) return isNum ? l.s === q : l.hay.includes(q);
+      return true;
+    });
+  }
+
+  function hl(text) {
+    if (!st.q || /^#?\d/.test(st.q)) return text;
+    const q = st.q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return text.replace(new RegExp('(' + q + ')(?![^<]*>)', 'gi'), '<mark>$1</mark>');
+  }
+
+  /* ----- list ----- */
+  function renderList() {
+    const f = filtered();
+    document.getElementById('count').textContent = f.length === LETTERS.length ? `${f.length} items` : `${f.length} of ${LETTERS.length}`;
+    if (!f.length) { listEl.innerHTML = '<p class="empty-list">No letters match. Try a different word, or clear the filters.</p>'; return; }
+    let html = '', yr = null, place = null;
+    f.forEach(l => {
+      if (l.year !== yr) { yr = l.year; html += `<h2 class="yr">${yr}</h2>`; }
+      if (l.loc && l.loc !== place) {
+        if (place !== null && !st.q) html += `<div class="move">Now writing from ${esc(PLACES[l.loc] ? PLACES[l.loc].full.split(', ').slice(-2).join(', ') : l.loc)}</div>`;
+        place = l.loc;
+      }
+      const marks = [];
+      if (l.ms) marks.push(`<span class="row-ms" title="${esc(l.ms)}">●</span>`);
+      if (l.transcript) marks.push('<span title="Transcribed">✎</span>');
+      if (l.typed) marks.push('<span title="Typed">T</span>');
+      const line = l.notes ? hl(fmt(l.notes)) : (l.kind === 'telegram' ? 'Western Union telegram' : 'Not yet summarized');
+      html += `<button class="row" type="button" data-s="${esc(l.s)}"${l.s === st.sel ? ' aria-current="true"' : ''}>
+        <span class="row-num${l.kind !== 'letter' ? ' word' : ''}">${esc(l.kind === 'letter' ? l.s : l.label)}</span>
+        <span style="min-width:0">
+          <span class="row-top"><span>${esc(l.dd)}${l.ms ? ' · <span class="row-ms">' + esc(l.ms) + '</span>' : ''}</span><span class="row-marks">${marks.join('')}</span></span>
+          <span class="row-line${l.notes ? '' : ' empty'}" style="display:block">${line}</span>
+        </span>
+      </button>`;
+    });
+    listEl.innerHTML = html;
+    const cur = listEl.querySelector('[aria-current="true"]');
+    if (cur) cur.scrollIntoView({ block: 'nearest' });
+  }
+  listEl.addEventListener('click', e => { const b = e.target.closest('.row'); if (b) open(b.dataset.s); });
+
+  /* ----- postmark ----- */
+  function postmark(l) {
+    const place = l.kind === 'telegram' ? 'WESTERN UNION' : (PLACES[l.loc] ? PLACES[l.loc].mark : 'U.S. MAIL');
+    const m = l.dd.match(/^([A-Za-z]+)\s*(\d{1,2})?,?\s*(\d{4})$/);
+    const mon = m ? m[1].slice(0, 3).toUpperCase() : '';
+    const day = m && m[2] ? m[2] : '';
+    const yr = m ? m[3] : l.d.slice(0, 4);
+    return `<svg class="postmark" viewBox="0 0 128 128" aria-hidden="true">
+      <defs><path id="pm-arc" d="M 18 64 A 46 46 0 0 1 110 64"/><path id="pm-arc-b" d="M 22 66 A 42 42 0 0 0 106 66"/></defs>
+      <circle cx="64" cy="64" r="58" fill="none" stroke="currentColor" stroke-width="2.2"/>
+      <circle cx="64" cy="64" r="36" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <text font-size="10.5" letter-spacing="1.4"><textPath href="#pm-arc" startOffset="50%" text-anchor="middle">${esc(place)}</textPath></text>
+      <text font-size="8" letter-spacing="2"><textPath href="#pm-arc-b" startOffset="50%" text-anchor="middle">★ ${l.kind === 'telegram' ? 'TELEGRAM' : 'MAILED'} ★</textPath></text>
+      <text x="64" y="${day ? 58 : 62}" font-size="13" text-anchor="middle" letter-spacing="1">${mon}${day ? ' ' + day : ''}</text>
+      <text x="64" y="${day ? 76 : 80}" font-size="16" text-anchor="middle" letter-spacing="1">${yr}</text>
+    </svg>`;
+  }
+
+  /* ----- transcript ----- */
+  function transcript(md) {
+    const inline = t => esc(t).replace(/\[\?\]/g, '<span class="unc" title="Uncertain reading">[?]</span>');
+    let html = '', para = [], first = true;
+    const flush = () => {
+      if (!para.length) return;
+      const text = para.join(' ');
+      html += first && /^(Dear|My|Hello|Darling)/.test(text) ? `<p class="salutation">${inline(text)}</p>` : `<p>${inline(text)}</p>`;
+      first = false; para = [];
+    };
+    md.split('\n').forEach(raw => {
+      const line = raw.trim();
+      if (!line || /^---+$/.test(line)) return flush();
+      if (/^#{1,2}\s/.test(line)) return flush();
+      if (/^###\s/.test(line)) { flush(); html += `<p class="transcript-note">${inline(line.replace(/^###\s*/, ''))}</p>`; return; }
+      const pg = line.match(/^\*\[page (\d+)\]\*$/i);
+      if (pg) { flush(); html += `<div class="page">Page ${pg[1]}</div>`; return; }
+      para.push(line);
+    });
+    flush();
+    return html;
+  }
+
+  /* ----- letter view ----- */
+  function navList() { const f = filtered(); return f.some(l => l.s === st.sel) ? f : LETTERS; }
+
+  function nearby(l) {
+    const d = new Date(l.d);
+    return EVENTS.filter(e => Math.abs(new Date(e.date) - d) / 864e5 < 45);
+  }
+  const fmtDate = iso => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+  function scanBlock(l) {
+    if (!l.id) return '<p class="scan-note">There’s no scan linked for this one yet.</p>';
+    return `<div class="scan">
+      <h3>The original</h3>
+      <div class="scan-frame"><iframe src="https://drive.google.com/file/d/${l.id}/preview" title="Scan of ${esc(l.title)}" loading="lazy"></iframe></div>
+      <p class="scan-note">Scan not showing? <a href="https://drive.google.com/file/d/${l.id}/view" target="_blank" rel="noopener">Open it in Google Drive</a>.</p>
+    </div>`;
+  }
+
+  function summaryBlock(l) {
+    let h = '';
+    if (l.notes) h += `<p class="summary">${fmt(l.notes)}</p>`;
+    else h += `<p class="unsummarized">${l.kind === 'telegram' ? 'A Western Union telegram. The scan below is the original.' : 'This letter hasn’t been summarized yet. The scan below is the original.'}</p>`;
+    if (l.context) h += `<p class="context"><strong>What was happening then:</strong> ${fmt(l.context)}</p>`;
+    if (l.excerpt) h += `<blockquote class="excerpt">“${esc(l.excerpt)}”</blockquote>`;
+    const ev = nearby(l);
+    if (ev.length) h += `<div class="events"><h3>In the news around then</h3><ul>${ev.map(e => `<li><time datetime="${e.date}">${fmtDate(e.date)}</time><span>${esc(e.label)}</span></li>`).join('')}</ul></div>`;
+    return h;
+  }
+
+  function renderLetter() {
+    const l = byS(st.sel);
+    const nl = navList(), i = nl.indexOf(l), prev = nl[i - 1], next = nl[i + 1];
+    const tags = [];
+    if (l.kind === 'telegram') tags.push('<span class="tag wire">Telegram</span>');
+    if (l.ms) tags.push(`<span class="tag ms">${esc(l.ms)}</span>`);
+    if (l.transcript) tags.push('<span class="tag tr">Transcribed</span>');
+    if (l.kind !== 'telegram') tags.push(`<span class="tag">${l.typed ? 'Typed' : 'Handwritten'}</span>`);
+    const place = l.kind === 'telegram' ? 'Western Union' : (PLACES[l.loc] ? PLACES[l.loc].full : 'Place not noted');
+
+    let body;
+    if (l.transcript) {
+      const tabs = [['summary', 'Summary'], ['transcription', 'Full text'], ['scan', 'Original scan']];
+      body = `<div class="tabs" role="tablist">${tabs.map(([k, v]) => `<button type="button" role="tab" data-tab="${k}" aria-selected="${st.tab === k}">${v}</button>`).join('')}</div>`;
+      if (st.tab === 'transcription') body += `<p class="transcript-note">Transcribed from the handwritten original. <span class="unc" style="color:var(--postmark)">[?]</span> marks a word that couldn’t be read with confidence.</p><div class="transcript">${transcript(l.transcript)}</div>`;
+      else if (st.tab === 'scan') body += scanBlock(l);
+      else body += summaryBlock(l);
+    } else {
+      body = '<div class="body-gap"></div>' + summaryBlock(l) + scanBlock(l);
+    }
+
+    const nb = (x, dir) => x
+      ? `<button type="button" class="nav-btn ${dir}" data-go="${esc(x.s)}"><small>${dir === 'prev' ? '‹ Previous' : 'Next ›'}</small><span>${esc(x.kind === 'letter' ? x.label : x.title)}</span> <small style="display:inline">${esc(x.dd)}</small></button>`
+      : `<button type="button" class="nav-btn ${dir}" disabled><small>${dir === 'prev' ? 'This is the first' : 'This is the last'}</small><span>—</span></button>`;
+
+    wrap.innerHTML = `<article class="sheet">
+      ${postmark(l)}
+      <h1 class="letter-no">${esc(l.title)}</h1>
+      <p class="letter-meta">${esc(l.dd)} &nbsp;/&nbsp; ${esc(place)}</p>
+      <div class="tags">${tags.join('')}</div>
+      ${body}
+      <div class="letter-foot">${nb(prev, 'prev')}${nb(next, 'next')}</div>
+      <div class="utility">
+        <button type="button" id="copy">Copy link to this letter</button>
+        ${l.id ? `<a href="https://drive.google.com/file/d/${l.id}/view" target="_blank" rel="noopener">Open in Google Drive</a>` : ''}
+      </div>
+    </article>`;
+  }
+
+  wrap.addEventListener('click', e => {
+    const go = e.target.closest('[data-go]'); if (go) return open(go.dataset.go);
+    const tab = e.target.closest('[data-tab]'); if (tab) { st.tab = tab.dataset.tab; renderLetter(); return; }
+    const y = e.target.closest('[data-jump]'); if (y) return open(y.dataset.jump);
+    if (e.target.id === 'copy') return copyLink(e.target);
+    if (e.target.id === 'start') return open(LETTERS[0].s);
+    if (e.target.id === 'browse') { app.dataset.view = 'list'; qEl.focus(); }
+  });
+
+  function copyLink(btn) {
+    const url = location.href.split('#')[0] + '#' + encodeURIComponent(st.sel);
+    const done = ok => { btn.textContent = ok ? 'Link copied' : 'Couldn’t copy — use the address bar'; setTimeout(() => { if (btn.isConnected) btn.textContent = 'Copy link to this letter'; }, 1800); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(() => done(true), () => done(false));
+    else done(false);
+  }
+
+  /* ----- welcome ----- */
+  function renderWelcome() {
+    const letters = LETTERS.filter(l => l.kind === 'letter').length;
+    // Journey: consecutive runs of the same place
+    const runs = [];
+    LETTERS.forEach(l => {
+      if (!l.loc) return;
+      const last = runs[runs.length - 1];
+      if (last && last.loc === l.loc) { last.n++; last.end = l; } else runs.push({ loc: l.loc, n: 1, start: l, end: l });
+    });
+    const seen = [];
+    runs.forEach(r => { if (!seen.includes(r.loc)) seen.push(r.loc); });
+    const bar = runs.map(r => `<button type="button" data-jump="${esc(r.start.s)}" style="flex:${r.n} 1 0;--seg:${PLACES[r.loc].seg}" title="${esc(PLACES[r.loc].full)}: ${r.n} letter${r.n > 1 ? 's' : ''}, ${esc(r.start.dd)} to ${esc(r.end.dd)}"><span class="sr-only">${esc(r.loc)}, ${r.n} letters from ${esc(r.start.dd)}</span></button>`).join('');
+    const key = seen.map(p => `<span style="--seg:${PLACES[p].seg}">${esc(PLACES[p].full.split(', ').slice(-2)[0])} · ${LETTERS.filter(l => l.loc === p).length}</span>`).join('');
+
+    // On this day: one letter per year within a week of today's date
+    const now = new Date();
+    const doy = (m, d) => Math.round((Date.UTC(2001, m, d) - Date.UTC(2001, 0, 1)) / 864e5);
+    const today = doy(now.getMonth(), now.getDate());
+    const best = {};
+    LETTERS.forEach(l => {
+      const [, m, d] = l.d.split('-').map(Number);
+      const diff = Math.abs(today - doy(m - 1, d));
+      if (!(diff <= 7 || diff >= 358)) return;
+      const score = (l.ms ? 3000 : 0) + (l.notes ? 1000 + l.notes.length : 0);
+      if (!best[l.year] || score > best[l.year].score) best[l.year] = { l, score };
+    });
+    const otd = Object.keys(best).sort().map(y => {
+      const l = best[y].l;
+      const text = l.notes ? (l.notes.length > 170 ? l.notes.slice(0, 170).replace(/\s\S*$/, '') + '…' : l.notes) : (l.kind === 'telegram' ? 'A Western Union telegram.' : 'Not yet summarized — open it to see the scan.');
+      return `<button type="button" class="otd-item" data-jump="${esc(l.s)}"><span class="otd-year">${y}</span><span class="otd-text"><b>${esc(l.title)}, ${esc(l.dd)}.</b> ${fmt(text)}</span></button>`;
+    }).join('');
+    const md = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+
+    wrap.innerHTML = `<article class="sheet welcome">
+      <h1>Letters to Jane</h1>
+      <p class="lede">Between August 1941 and August 1945, Milan Swasko wrote ${letters} letters to Jane Fijal: from college in Carthage, summers home in Charleroi and Valparaiso, and seminary in Minneapolis, through Pearl Harbor, D-Day and V-E Day, to a few weeks before their wedding.</p>
+      <div class="journey">
+        <div class="journey-bar" role="group" aria-label="Where he was writing from, in order">${bar}</div>
+        <div class="journey-key">${key}</div>
+      </div>
+      <div class="welcome-actions">
+        <button type="button" class="btn-ink" id="start">Read the first letter</button>
+        <button type="button" class="btn-ghost" id="browse">Search the letters</button>
+      </div>
+      <section class="otd">
+        <h2>On this day</h2>
+        <p>Letters written within a week of ${esc(md)}, in other years.</p>
+        ${otd || '<p class="otd-text">None from this week. Pick a year from the list instead.</p>'}
+      </section>
+    </article>`;
+  }
+
+  /* ----- routing ----- */
+  const canHash = (() => { try { return /^(https?|file):$/.test(location.protocol); } catch (e) { return false; } })();
+  function setHash(s) {
+    if (!canHash) return;
+    try { if (s) history.pushState(null, '', '#' + encodeURIComponent(s)); else history.pushState(null, '', location.pathname + location.search); } catch (e) {}
+  }
+
+  function open(s, fromHash) {
+    const l = byS(String(s).toLowerCase());
+    if (!l) return home(fromHash);
+    if (st.sel !== l.s) st.tab = 'summary';
+    st.sel = l.s;
+    renderLetter();
+    renderList();
+    app.dataset.view = 'letter';
+    deskEl.scrollTop = 0;
+    if (!fromHash && location.hash.slice(1) !== encodeURIComponent(l.s)) setHash(l.s);
+    document.title = `${l.title}, ${l.dd} — Letters to Jane`;
+  }
+  function home(fromHash) {
+    st.sel = null;
+    renderWelcome(); renderList();
+    app.dataset.view = window.innerWidth <= 720 ? 'list' : 'letter';
+    deskEl.scrollTop = 0;
+    if (!fromHash) setHash('');
+    document.title = 'Letters to Jane';
+  }
+  function step(dir) {
+    if (!st.sel) { const f = filtered(); if (f.length) open(f[dir > 0 ? 0 : f.length - 1].s); return; }
+    const nl = navList(), t = nl[nl.findIndex(l => l.s === st.sel) + dir];
+    if (t) open(t.s);
+  }
+  function fromHash() {
+    let h = ''; try { h = decodeURIComponent(location.hash.slice(1)); } catch (e) {}
+    if (h) open(h, true); else home(true);
+  }
+  window.addEventListener('hashchange', fromHash);
+  window.addEventListener('popstate', fromHash);
+
+  document.getElementById('back').addEventListener('click', () => { if (st.sel) home(); else app.dataset.view = 'list'; });
+  document.getElementById('home-btn').addEventListener('click', () => home());
+
+  /* ----- filters ----- */
+  document.querySelectorAll('.years button').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.years button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    st.year = b.dataset.year === 'all' ? 'all' : +b.dataset.year;
+    renderList(); if (st.sel) renderLetter();
+    listEl.scrollTop = 0;
+  }));
+  const tog = (id, key) => document.getElementById(id).addEventListener('click', e => {
+    st[key] = !st[key]; e.currentTarget.setAttribute('aria-pressed', st[key]);
+    renderList(); if (st.sel) renderLetter();
+  });
+  tog('t-ms', 'ms'); tog('t-tr', 'tr');
+  let qt;
+  qEl.addEventListener('input', () => {
+    clearTimeout(qt);
+    qt = setTimeout(() => {
+      st.q = qEl.value.trim().toLowerCase();
+      document.getElementById('q-clear').hidden = !st.q;
+      renderList(); if (st.sel) renderLetter();
+      listEl.scrollTop = 0;
+    }, 120);
+  });
+  document.getElementById('q-clear').addEventListener('click', () => { qEl.value = ''; qEl.dispatchEvent(new Event('input')); qEl.focus(); });
+
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input, textarea, select')) { if (e.key === 'Escape' && e.target === qEl) { qEl.value = ''; qEl.dispatchEvent(new Event('input')); } return; }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+    else if (e.key === '/') { e.preventDefault(); app.dataset.view = 'list'; qEl.focus(); }
+  });
+
+  fromHash();
+}
+})();
+</script>
+</body>
+</html>
