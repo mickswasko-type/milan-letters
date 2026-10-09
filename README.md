@@ -1,4 +1,4 @@
-# Letters to Jane
+# Letters to Janie
 
 A private family archive of the letters the Rev. Milan E. Swasko wrote to Jane Fijal, 1941–1945.
 

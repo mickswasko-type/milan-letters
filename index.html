@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Letters to Jane</title>
+<title>Letters to Janie</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='42' y='8' width='16' height='84' rx='2' fill='%23A33A2C'/%3E%3Crect x='8' y='34' width='84' height='16' rx='2' fill='%23A33A2C'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -269,7 +269,7 @@ mark { background: rgba(45,92,143,.16); color: inherit; border-radius: 2px; }
 <main id="gate">
   <form class="envelope" id="gate-form" autocomplete="on">
     <svg class="mark" aria-hidden="true"><use href="#rose-cross"/></svg>
-    <h1>Letters to Jane</h1>
+    <h1>Letters to Janie</h1>
     <p>The letters Milan Swasko wrote to Jane Fijal, 1941 to 1945. This family archive is password protected — ask Mick if you need the password.</p>
     <div class="field">
       <label for="pw">Password</label>
@@ -286,7 +286,7 @@ mark { background: rgba(45,92,143,.16); color: inherit; border-radius: 2px; }
     <div class="rail-head">
       <button class="brand" id="home-btn" type="button" title="Back to the introduction">
         <svg class="mark" aria-hidden="true"><use href="#rose-cross"/></svg>
-        <span><span class="brand-title">Letters to Jane</span><span class="brand-sub" style="display:block">Milan E. Swasko, 1941–1945</span></span>
+        <span><span class="brand-title">Letters to Janie</span><span class="brand-sub" style="display:block">Milan E. Swasko, 1941–1945</span></span>
       </button>
       <div class="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -687,7 +687,7 @@ function start(data) {
     const md = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
     wrap.innerHTML = `<article class="sheet welcome">
-      <h1>Letters to Jane</h1>
+      <h1>Letters to Janie</h1>
       <p class="lede">Between August 1941 and August 1945, Milan Swasko wrote ${letters} letters to Jane Fijal: from college in Carthage, summers in Charleroi and Valparaiso, and seminary in Minneapolis. And everywhere he hitchhiked in between. Through Pearl Harbor, D-Day and V-E Day, to a few weeks before their wedding, Milan kept writing as the world changed forever. He asked her to burn them after reading. She never did.</p>
       <figure class="map">${mapSVG()}</figure>
       <p class="map-caption">Where he wrote from. The dotted line follows him in order; pick a place to see only the letters written there.</p>
@@ -721,7 +721,7 @@ function start(data) {
     app.dataset.view = 'letter';
     deskEl.scrollTop = 0;
     if (!fromHash && location.hash.slice(1) !== encodeURIComponent(l.s)) setHash(l.s);
-    document.title = `${l.title}, ${l.dd} — Letters to Jane`;
+    document.title = `${l.title}, ${l.dd} — Letters to Janie`;
   }
   function home(fromHash) {
     st.sel = null;
@@ -729,7 +729,7 @@ function start(data) {
     app.dataset.view = 'letter';
     deskEl.scrollTop = 0;
     if (!fromHash) setHash('');
-    document.title = 'Letters to Jane';
+    document.title = 'Letters to Janie';
   }
   function step(dir) {
     if (!st.sel) { const f = filtered(); if (f.length) open(f[dir > 0 ? 0 : f.length - 1].s); return; }
